@@ -158,26 +158,39 @@
 		
 			
 			
-			Na sljedećim slikama prikazani su dijagrami razreda koji pripadaju backend dijelu aplikacije.
+			Na sljedećim slikama, 4.10, 4.11, 4.12 i 4.13 prikazani su dijagrami razreda koji pripadaju backend dijelu aplikacije. Na slici 4.10 prikazani su ruteri logički podijeljeni metodama određenih aktora. Tako imamo "Users Router", "Admin Router" i "Auth Router" koje sve sadrži API (glavni dio backenda aplikacije). Metode implementirane u tim klasama manipuliraju podacima iz baze i podacima o trenutnom korisniku (web token i ostali podaci u kolačiću).
 			
-			\begin{figure}[htbp]
+			\begin{figure}[H]
 				\centering
 				\includegraphics[width=\linewidth]{slike/dijagram_razreda.png}
+				\label{fig:implenetacija1}
+				\caption{Dijagram razreda - Dio Controllers}
 			\end{figure}
 			
+			\eject
 			
+			Modeli razreda, odnosno DTO (Data transfer object) služe za komunikaciju i prijenos podataka i baze u aplikaciju i obratno. Kada se korisnik bez korisničkog računa registrira, aplikacija koristi \textbf{RegistrationFormDTO} dok se pri prijavi korisnika s postojećim računom koristi \textbf{LoginFormDTO}. Kada se kreira korisnički račun, aplikacija za njegov prikaz i spremanje u bazu koristi \textbf{UserDTO}. Pri izradi natjecanja se koristi \textbf{ProblemsDTO}, a za kreiranje natjecanja \textbf{CreateCompetitionDTO}. Kada korisnik ide predati svoje rješenje zadatka na natjecanju, koristi se \textbf{CreateSubmissionDTO}. Za prikaz rezultata natjecanja koristimo \textbf{CompetitionResultDTO}, za izmjenu postojećih natjecanja, odnosno problema koriste se \textbf{ModifyCompetitionDTO} i \textbf{ModifyProblemDTO}. Trofeji se prikazuju pomoću \textbf{TrophyDTO}, korisnikova statistika sa \textbf{UserStatisticsDTO}.
 
-			\begin{figure}[htbp]
+			\begin{figure}[H]
 				\centering
 				\includegraphics[width=\linewidth]{slike/dto.png}
+				\caption{Dijagram razreda - DTO dio 1}
+				\label{fig:implenetacija2}
+			\end{figure}
+			
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=\linewidth]{slike/dto_2.png}
+				\caption{Dijagram razreda - DTO dio 2}
+				\label{fig:implenetacija3}
 			\end{figure}
 			\eject
 			
 			\begin{figure}[H]
 				\includegraphics[width=\linewidth]{slike/ImplementacijskiDijagramRazreda}
 				\centering
-				\caption{Implementacijski dijgram razreda}
-				\label{fig:implementacija}
+				\caption{Dijagram razreda - implementacijski dijagram}
+				\label{fig:implementacija4}
 			\end{figure}
 			
 			\eject
