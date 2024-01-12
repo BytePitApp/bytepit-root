@@ -43,7 +43,7 @@
 			 Na azure app service-u nalaze se API sa evaluatorom rješenja, poslužitelj baze podataka (azure sql database) te third party servis za kompajliranje koda.
 			 Klijenti koriste web preglednik za pristup web aplikaciji. Sustav je baziran na REST API arhitekturi, a komunikacija između klijenta i poslužitelja odvija se preko HTTP veze.
 
-			 \eject
+			 
 			
 			\begin{figure}[H]
 				\includegraphics[width=\linewidth]{slike/dijagram_razmjestaja.png} 
@@ -55,12 +55,47 @@
 		
 		\section{Upute za puštanje u pogon}
 		
-			\textbf{\textit{dio 2. revizije}}\\
-		
-			 \textit{U ovom poglavlju potrebno je dati upute za puštanje u pogon (engl. deployment) ostvarene aplikacije. Na primjer, za web aplikacije, opisati postupak kojim se od izvornog kôda dolazi do potpuno postavljene baze podataka i poslužitelja koji odgovara na upite korisnika. Za mobilnu aplikaciju, postupak kojim se aplikacija izgradi, te postavi na neku od trgovina. Za stolnu (engl. desktop) aplikaciju, postupak kojim se aplikacija instalira na računalo. Ukoliko mobilne i stolne aplikacije komuniciraju s poslužiteljem i/ili bazom podataka, opisati i postupak njihovog postavljanja. Pri izradi uputa preporučuje se \textbf{naglasiti korake instalacije uporabom natuknica} te koristiti što je više moguće \textbf{slike ekrana} (engl. screenshots) kako bi upute bile jasne i jednostavne za slijediti.}
+			\textbf{Pokretanje backend-a i baze podataka}\\
 			
+				\noindent Potrebno je preuzeti i instalirati aplikaciju \href{https://www.docker.com/products/docker-desktop/}{Docker Desktop} uz pomoć koje se pokreću container-i za backend i bazu podataka. Nakon preuzimanja aplikacije moramo se u terminalu navigirati do direktorija \textit{bytepit-root} unutar kojeg se nalazi docker-compose datoteka koja sadrži informacije za pokretanje. Pri prvom pokretanju potrebno je nekoliko minuta za podizanje.\\
+				Unutar terminala koristimo naredbu: \textbf{docker-compose up --build}
+				\begin{figure}[H]
+					\includegraphics[scale=0.45]{slike/docker_desktop.PNG} 
+					\centering
+					\caption{Aplikacija Docker Desktop sa kreiranim containerima}
+					\label{fig:docker_desktop}
+				\end{figure}
+				\noindent Pri prvom pokretanju unutar baze neće biti kreirane potrebne tablice, ali ih možemo kreirati uz pomoć datoteke \textbf{ddl.sql} koja se nalazi unutar direktorija \textit{bytepit-root}. Unutar aplikacije Docker Desktop možemo kliknuti na opcije od baze (tri uspravne točkice ispod zaglavlja Actions), te odabrati opciju \textbf{Open in terminal} uz pomoć koje možemo upisati naredbe za kreaciju tablica unutar baze. Unutar terminala odabiremo opciju \textbf{Exec} te u njoj napišemo naredbu: \textbf{psql -U postgres -d db}\\
+				\eject
+				\noindent Tada možemo pisati naredbe za našu bazu u SQL-u unutar terminala. Sljedeća naredba koju unosimo je cijela \textbf{ddl.sql} datoteka uz pomoć koje se kreiraju tablice. Nakon toga su backend i baza podataka uspješno postavljeni i spremni za korištenje. Kao provjeru za ispravno kreiranje tablica možemo napisati query poput ovoga:\\
+				\textbf{SELECT * FROM problems;}, u slučaju ispravnog postavljanja ispisuje se tablica \textit{problems}.\\
+				\begin{figure}[H]
+					\includegraphics[scale=0.4]{slike/postgres.PNG} 
+					\centering
+					\caption{Ispravno ispunjena baza i provjera}
+					\label{fig:docker_desktop_postgres}
+				\end{figure}
+				\noindent Za zaustavljanje Docker container-a koristimo naredbu: \textbf{docker-compose down}\\
+				
+			\eject
 			
-			 \textit{Dovršenu aplikaciju potrebno je pokrenuti na javno dostupnom poslužitelju. Studentima se preporuča korištenje neke od sljedećih besplatnih usluga: \href{https://aws.amazon.com/}{Amazon AWS}, \href{https://azure.microsoft.com/en-us/}{Microsoft Azure} ili \href{https://www.heroku.com/}{Heroku}. Mobilne aplikacije trebaju biti objavljene na F-Droid, Google Play ili Amazon App trgovini.}
+			\noindent\textbf{Pokretanje frontend-a}\\
 			
+			\noindent Unutar terminala se navigiramo do direktorija \textit{bytepit-ui} te pokrećemo naredbu: \textbf{npm install}\\
+			Pomoću te naredbe se pokreće instalacija Vite-a i ostalih dependency-a koji su potrebni za pokretanje frontend-a. Za instalaciju je potrebno nekoliko minuta.\\
+			\noindent Nakon instalacije pokrećemo naredbu: \textbf{npm run dev} koja pokreće frontend.
+			\begin{figure}[H]
+				\includegraphics[scale=0.9]{slike/vite.PNG} 
+				\centering
+				\caption{Terminal nakon uspješno izvedene funkcije za pokretanje}
+				\label{fig:vite}
+			\end{figure}
+			\noindent Tada možemo otvoriti web-preglednik i upisati \textbf{http://localhost:5173/} i početi koristiti aplikaciju.\\
+			\begin{figure}[H]
+				\includegraphics[scale=0.4]{slike/bytepit.PNG} 
+				\centering
+				\caption{Pokrenuta aplikacija}
+				\label{fig:bytepit}
+			\end{figure}
+			Za zaustavljanje koristimo naredbu: \textbf{npm run stop}\\
 			
-			\eject 
