@@ -1,13 +1,25 @@
 from selenium import webdriver
-from selenium.webdriver.support.ui import WebDriverWait
-
+from selenium.webdriver.support.ui import WebDriverWait, Select
+from selenium.webdriver.common.by import By
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.support import expected_conditions as EC
+import random
+import string
 
 URLS = {
     'login_page': 'https://bytepit.cloud/login',
     'login': 'https://bytepit.cloud/api/auth/login',
-    'logout': 'https://bytepit.cloud/api/auth/logout'
+    'logout': 'https://bytepit.cloud/api/auth/logout',
+    'register_page': 'https://bytepit.cloud/register',
+    'register': 'https://bytepit.cloud/api/auth/register',
+
 }
 
+def generate_random_string(length):
+    return ''.join(random.choice(string.ascii_lowercase) for i in range(length))
+
+def generate_random_email():
+    return f"{generate_random_string(7)}@example.com"
 
 def wait_for_ajax_complete(driver):
     return driver.execute_script("return (window.performance.getEntriesByType('resource').filter(resource => "
@@ -37,8 +49,34 @@ def login(driver, username='test', password='testtest'):
 
     username_input_field.send_keys(username)
     password_input_field.send_keys(password)
+
     submit_button.click()
 
+def register(driver, email='test@test.com', name='Test', username='testuser', surname='User', password='testpass', role='Contestant'):
+    driver.get(URLS['register_page'])
+
+    dropdown = driver.find_element(By.ID, "role")
+    dropdown.click()
+
+    WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//div[contains(@class, 'dropdown') and .//div[text()='Contestant']]")))
+    role_option = driver.find_element(By.XPATH, "//div[contains(@class, 'dropdown') and .//div[text()='Contestant']]")
+    role_option.click()
+    
+    email_input_field = driver.find_element(By.NAME, 'email')
+    name_input_field = driver.find_element(By.NAME, 'name')
+    username_input_field = driver.find_element(By.NAME, 'username')
+    surname_input_field = driver.find_element(By.NAME, 'surname')
+    password_input_field = driver.find_element(By.NAME, 'password')
+    
+    submit_button = driver.find_element(By.XPATH, "//button[.//span[contains(text(), 'Submit')]]")
+    
+    email_input_field.send_keys(email)
+    name_input_field.send_keys(name)
+    username_input_field.send_keys(username)
+    surname_input_field.send_keys(surname)
+    password_input_field.send_keys(password)
+
+    submit_button.click()
 
 def test_login():
     driver = define_driver()
@@ -52,7 +90,7 @@ def test_login():
     else:
         print('TEST LOGIN: FAILED')
 
-    driver.save_screenshot('screenshot_test_result.png')
+    driver.save_screenshot('test_screenshots/screenshot_test_result.png')
 
     driver.quit()
 
@@ -65,7 +103,7 @@ def test_login_with_wrong_credentials():
 
     api_response = wait.until(lambda d: wait_for_api_response(d, URLS['login']))
 
-    driver.save_screenshot('failed_login.png')
+    driver.save_screenshot('test_screenshots/failed_login.png')
 
     response_code = api_response['responseStatus']
 
@@ -90,7 +128,7 @@ def test_logout():
     api_response = wait.until(lambda d: wait_for_api_response(d, URLS['logout']))
 
     if api_response['responseStatus'] == 200:
-        driver.save_screenshot('screen_after_logout.png')
+        driver.save_screenshot('test_screenshots/screen_after_logout.png')
     else:
         print('TEST LOGOUT: FAILED')
 
@@ -102,11 +140,61 @@ def test_logout():
     driver.quit()
 
 
+
+def test_register_already_exists():
+    driver = define_driver()
+    register(driver, email='existinguser@example.com', name='Test', username='existinguser', surname='User', password='testpassword', role='Contestant')
+    wait = WebDriverWait(driver, 10)
+    api_response = wait.until(lambda d: wait_for_api_response(d, URLS['register']))
+    driver.save_screenshot('test_screenshots/registration_already_exists_test_result.png')
+    
+    if api_response['responseStatus'] == 400:
+        print('TEST REGISTER ALREADY EXISTS: PASSED')
+    else:
+        print('TEST REGISTER ALREADY EXISTS: FAILED - Unexpected Response Status:', api_response['responseStatus'])
+    
+    driver.quit()
+
+def test_register_new_user():
+    driver = define_driver()
+    attempt_count = 3 
+
+    for attempt in range(attempt_count):
+        try:
+            random_username = generate_random_string(8)
+            random_email = generate_random_email()
+            register(driver, email=random_email, name='Test', username=random_username, surname='User', password='testpassword', role='Contestant')
+            wait = WebDriverWait(driver, 20)  
+            api_response = wait.until(lambda d: wait_for_api_response(d, URLS['register']))
+            driver.save_screenshot('test_screenshots/registration_new_user_test_result.png')
+            
+            if api_response['responseStatus'] == 201:
+                print('TEST REGISTER NEW USER: PASSED')
+                break
+            else:
+                print(f'TEST REGISTER NEW USER: FAILED - Response Status: {api_response["responseStatus"]}')
+                if attempt < attempt_count - 1:
+                    print("Retrying registration...")
+                else:
+                    print("All attempts failed.")
+
+        except TimeoutException as e:
+            print(f'TEST REGISTER NEW USER: ATTEMPT {attempt + 1} - Timeout Exception: {e}')
+            if attempt < attempt_count - 1:
+                print("Retrying registration...")
+            else:
+                print("All attempts failed.")
+        finally:
+            driver.quit()
+
+
 def main():
     test_login()
     test_login_with_wrong_credentials()
     test_logout()
-
+    test_register_already_exists()
+    test_register_new_user()
 
 if __name__ == '__main__':
     main()
+
