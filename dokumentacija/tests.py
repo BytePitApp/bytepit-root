@@ -1,10 +1,12 @@
+import random
+import string
+import time
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support import expected_conditions as EC
-import random
-import string
+
 
 URLS = {
     'login_page': 'https://bytepit.cloud/login',
@@ -12,6 +14,10 @@ URLS = {
     'logout': 'https://bytepit.cloud/api/auth/logout',
     'register_page': 'https://bytepit.cloud/register',
     'register': 'https://bytepit.cloud/api/auth/register',
+    'login_page_dev': 'https://dev.bytepit.cloud/login',
+    'login_dev': 'https://dev.bytepit.cloud/api/auth/login',
+    'create_problem': 'https://dev.bytepit.cloud/api/organiser/create-problem',
+    'problems': 'https://dev.bytepit.cloud/api/problems'
 
 }
 
@@ -40,8 +46,20 @@ def define_driver():
     return driver
 
 
-def login(driver, username='test', password='testtest'):
-    driver.get(URLS['login_page'])
+def login(driver, username='test', password='testtest', url=URLS['login_page']):
+    driver.get(url)
+
+    username_input_field = driver.find_element('name', 'username')
+    password_input_field = driver.find_element('name', 'password')
+    submit_button = driver.find_element('xpath', '//span[text()="Submit"]')
+
+    username_input_field.send_keys(username)
+    password_input_field.send_keys(password)
+
+    submit_button.click()
+
+def login_dev(driver, username='sipa', password='blablabla', url=URLS['login_page_dev']):
+    driver.get(url)
 
     username_input_field = driver.find_element('name', 'username')
     password_input_field = driver.find_element('name', 'password')
@@ -77,6 +95,94 @@ def register(driver, email='test@test.com', name='Test', username='testuser', su
     password_input_field.send_keys(password)
 
     submit_button.click()
+
+def set_points_value(driver, value):
+    
+    points_input_js = f"document.querySelector('input#minmaxfraction').value = '{value}';"
+    driver.execute_script(points_input_js)
+
+def create_problem(driver, name, description, points, runtime_limit, example_input, example_output, is_private, is_hidden, input_file_path, output_file_path):
+    driver.get(URLS['login_page_dev'])  
+    username_input_field = driver.find_element('name', 'username')
+    password_input_field = driver.find_element('name', 'password')
+    username_input_field.send_keys('sipa')
+    password_input_field.send_keys('blablabla')
+    
+    submit_button = driver.find_element('xpath', '//span[text()="Submit"]')
+    submit_button.click()
+    
+    time.sleep(10)
+    
+    driver.get('https://dev.bytepit.cloud/organiser/create-problem')
+
+    WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.NAME, 'name'))
+    )
+
+    
+    name_input_field = driver.find_element(By.NAME, 'name')
+    description_input_field = driver.find_element(By.NAME, 'description')
+    all_minmaxfraction_inputs = driver.find_elements(By.ID, 'minmaxfraction')
+    points_input_field = all_minmaxfraction_inputs[0]  
+    runtime_limit_input_field = all_minmaxfraction_inputs[1]  
+
+    
+    points_input_field.clear()
+    points_input_field.send_keys(int(points))
+    
+    runtime_limit_input_field.clear()
+    runtime_limit_input_field.send_keys(runtime_limit)
+    
+    example_input_textarea = WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located((By.NAME, 'exampleInput'))
+    )
+
+    example_output_textarea = WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located((By.NAME, 'exampleOutput'))
+    )   
+
+    example_input_textarea.send_keys(example_input)
+    example_output_textarea.send_keys(example_output)
+    
+    if is_private:
+        
+        private_option = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, "//label[contains(text(),'Private')]/following-sibling::div//div[contains(@class,'radiobutton')]"))
+        )
+        
+        private_option.click()
+    else:
+        
+        public_option = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, "//label[contains(text(),'Private')]/following-sibling::div//div[contains(@class,'radiobutton-checked')]"))
+        )
+        
+        public_option.click()
+
+   
+    if is_hidden:
+        hidden_option = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, "//label[contains(text(),'Hidden')]/following-sibling::div//div[contains(@class,'radiobutton')]"))
+        )
+        hidden_option.click()
+    else:
+        visible_option = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, "//label[contains(text(),'Hidden')]/following-sibling::div//div[contains(@class,'radiobutton-checked')]"))
+        )
+        visible_option.click()
+
+    test_files_input = WebDriverWait(driver, 10).until(
+        EC.element_to_be_clickable((By.ID, "testFiles"))
+    )
+    test_files_input.send_keys(input_file_path + "\n" + output_file_path)
+
+    name_input_field.send_keys(name)
+    description_input_field.send_keys(description)
+
+    submit_button = driver.find_element(By.XPATH, "//button[.//span[contains(text(), 'Submit')]]")
+    driver.save_screenshot('test_screenshots/submit.png')
+    submit_button.click()
+    driver.save_screenshot('test_screenshots/submit2.png')
 
 def test_login():
     driver = define_driver()
@@ -187,6 +293,50 @@ def test_register_new_user():
         finally:
             driver.quit()
 
+def test_create_problem():
+    driver = define_driver()
+    
+    try:
+        
+        input_file_path = '/home/fran/Desktop/progi/bytepit-root/dokumentacija/test_input_files/1_in.txt'  
+        output_file_path = '/home/fran/Desktop/progi/bytepit-root/dokumentacija/test_input_files/1_out.txt'  
+        
+        create_problem(
+            driver,
+            name='Test Problem',
+            description='This is a test problem.',
+            points=10,
+            runtime_limit=1.0,
+            example_input='1\n2\n',
+            example_output='3\n',
+            is_private=True,
+            is_hidden=False,
+            input_file_path=input_file_path,
+            output_file_path=output_file_path
+        )
+        
+        wait = WebDriverWait(driver, 30)
+        api_response = wait.until(lambda d: wait_for_api_response(d, URLS['problems']))
+        response_status = api_response.get('responseStatus', None)
+        driver.save_screenshot('test_screenshots/create_problem_test1.png')
+
+        if response_status == 422:
+            print('TEST CREATE PROBLEM: PASSED')
+        else:
+            print(f"TEST CREATE PROBLEM: FAILED - Response Status: {response_status}")
+        
+            error_details = api_response.get('responseText', {}).get('errors', 'Unknown error')
+            print(f"Error details: {error_details}")
+
+
+        
+    except TimeoutException as e:
+        print(f'TEST CREATE PROBLEM: FAILED - Timeout Exception: {e}')
+    except Exception as e:
+        print(f'TEST CREATE PROBLEM: FAILED - {str(e)}')
+    finally:
+        driver.quit()
+
 
 def main():
     test_login()
@@ -194,6 +344,7 @@ def main():
     test_logout()
     test_register_already_exists()
     test_register_new_user()
+    test_create_problem()
 
 if __name__ == '__main__':
     main()
