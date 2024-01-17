@@ -2,7 +2,7 @@ import random
 import string
 import time
 from selenium import webdriver
-from selenium.webdriver.support.ui import WebDriverWait, Select
+from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support import expected_conditions as EC
@@ -96,10 +96,36 @@ def register(driver, email='test@test.com', name='Test', username='testuser', su
 
     submit_button.click()
 
+
 def set_points_value(driver, value):
-    
-    points_input_js = f"document.querySelector('input#minmaxfraction').value = '{value}';"
-    driver.execute_script(points_input_js)
+    try:
+        WebDriverWait(driver, 10).until(
+            EC.visibility_of_element_located((By.ID, 'minmaxfraction'))
+        )
+
+        up_button_xpath = "/html/body/div/div/div[2]/form/div/span[3]/span/span/button[1]"
+        up_button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, up_button_xpath))
+        )
+
+        current_value = 0
+        
+        while current_value < value:
+            up_button.click()
+            
+            WebDriverWait(driver, 1).until(
+                lambda d: float(d.execute_script("return document.getElementById('minmaxfraction').value;")) > current_value
+            )
+            
+            current_value = float(driver.execute_script("return document.getElementById('minmaxfraction').value;"))
+
+    except TimeoutException as e:
+        print("Failed to set the points value due to a timeout:", e)
+
+
+def set_runtime_limit_value(driver, value):
+    driver.execute_script(f"document.querySelectorAll('input#minmaxfraction')[1].value = '{value}';")
+
 
 def create_problem(driver, name, description, points, runtime_limit, example_input, example_output, is_private, is_hidden, input_file_path, output_file_path):
     driver.get(URLS['login_page_dev'])  
@@ -111,27 +137,21 @@ def create_problem(driver, name, description, points, runtime_limit, example_inp
     submit_button = driver.find_element('xpath', '//span[text()="Submit"]')
     submit_button.click()
     
-    time.sleep(10)
+    time.sleep(2)
     
     driver.get('https://dev.bytepit.cloud/organiser/create-problem')
 
     WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.NAME, 'name'))
     )
-
     
     name_input_field = driver.find_element(By.NAME, 'name')
     description_input_field = driver.find_element(By.NAME, 'description')
-    all_minmaxfraction_inputs = driver.find_elements(By.ID, 'minmaxfraction')
-    points_input_field = all_minmaxfraction_inputs[0]  
-    runtime_limit_input_field = all_minmaxfraction_inputs[1]  
-
+    name_input_field.send_keys(name)
+    description_input_field.send_keys(description)
     
-    points_input_field.clear()
-    points_input_field.send_keys(int(points))
-    
-    runtime_limit_input_field.clear()
-    runtime_limit_input_field.send_keys(runtime_limit)
+    set_points_value(driver, float(points))
+    set_runtime_limit_value(driver, runtime_limit)
     
     example_input_textarea = WebDriverWait(driver, 10).until(
         EC.visibility_of_element_located((By.NAME, 'exampleInput'))
@@ -158,7 +178,6 @@ def create_problem(driver, name, description, points, runtime_limit, example_inp
         )
         
         public_option.click()
-
    
     if is_hidden:
         hidden_option = WebDriverWait(driver, 10).until(
@@ -176,13 +195,11 @@ def create_problem(driver, name, description, points, runtime_limit, example_inp
     )
     test_files_input.send_keys(input_file_path + "\n" + output_file_path)
 
-    name_input_field.send_keys(name)
-    description_input_field.send_keys(description)
-
     submit_button = driver.find_element(By.XPATH, "//button[.//span[contains(text(), 'Submit')]]")
-    driver.save_screenshot('test_screenshots/submit.png')
+    
+    time.sleep(1)
     submit_button.click()
-    driver.save_screenshot('test_screenshots/submit2.png')
+    
 
 def test_login():
     driver = define_driver()
@@ -305,8 +322,8 @@ def test_create_problem():
             driver,
             name='Test Problem',
             description='This is a test problem.',
-            points=10,
-            runtime_limit=1.0,
+            points=2.0,
+            runtime_limit=2.0,
             example_input='1\n2\n',
             example_output='3\n',
             is_private=True,
@@ -318,7 +335,51 @@ def test_create_problem():
         wait = WebDriverWait(driver, 30)
         api_response = wait.until(lambda d: wait_for_api_response(d, URLS['problems']))
         response_status = api_response.get('responseStatus', None)
-        driver.save_screenshot('test_screenshots/create_problem_test1.png')
+        driver.save_screenshot('test_screenshots/create_problem_test.png')
+
+        if response_status == 201:
+            print('TEST CREATE PROBLEM: PASSED')
+        else:
+            print(f"TEST CREATE PROBLEM: FAILED - Response Status: {response_status}")
+        
+            error_details = api_response.get('responseText', {}).get('errors', 'Unknown error')
+            print(f"Error details: {error_details}")
+
+
+        
+    except TimeoutException as e:
+        print(f'TEST CREATE PROBLEM: FAILED - Timeout Exception: {e}')
+    except Exception as e:
+        print(f'TEST CREATE PROBLEM: FAILED - {str(e)}')
+    finally:
+        driver.quit()
+
+def test_create_problem_with_zero_points():
+    driver = define_driver()
+    
+    try:
+        
+        input_file_path = '/home/fran/Desktop/progi/bytepit-root/dokumentacija/test_input_files/1_in.txt'  
+        output_file_path = '/home/fran/Desktop/progi/bytepit-root/dokumentacija/test_input_files/1_out.txt'  
+        
+        create_problem(
+            driver,
+            name='Test Problem',
+            description='This is a test problem.',
+            points=0.0,
+            runtime_limit=2.0,
+            example_input='1\n2\n',
+            example_output='3\n',
+            is_private=True,
+            is_hidden=False,
+            input_file_path=input_file_path,
+            output_file_path=output_file_path
+        )
+        
+        wait = WebDriverWait(driver, 30)
+        api_response = wait.until(lambda d: wait_for_api_response(d, URLS['problems']))
+        response_status = api_response.get('responseStatus', None)
+        driver.save_screenshot('test_screenshots/create_problem_test_wrong.png')
 
         if response_status == 422:
             print('TEST CREATE PROBLEM: PASSED')
@@ -337,7 +398,6 @@ def test_create_problem():
     finally:
         driver.quit()
 
-
 def main():
     test_login()
     test_login_with_wrong_credentials()
@@ -345,6 +405,7 @@ def main():
     test_register_already_exists()
     test_register_new_user()
     test_create_problem()
+    test_create_problem_with_zero_points()
 
 if __name__ == '__main__':
     main()
