@@ -28,14 +28,208 @@
 			
 			\subsection{Ispitivanje sustava}
 			
-			 \textit{Potrebno je provesti i opisati ispitivanje sustava koristeći radni okvir Selenium\footnote{\url{https://www.seleniumhq.org/}}. Razraditi \textbf{minimalno 4 ispitna slučaja} u kojima će se ispitati redovni slučajevi, rubni uvjeti te poziv funkcionalnosti koja nije implementirana/izaziva pogrešku kako bi se vidjelo na koji način sustav reagira kada nešto nije u potpunosti ostvareno. Ispitni slučaj se treba sastojati od ulaza (npr. korisničko ime i lozinka), očekivanog izlaza ili rezultata, koraka ispitivanja i dobivenog izlaza ili rezultata.\\ }
-			 
-			 \textit{Izradu ispitnih slučajeva pomoću radnog okvira Selenium moguće je provesti pomoću jednog od sljedeća dva alata:}
-			 \begin{itemize}
-			 	\item \textit{dodatak za preglednik \textbf{Selenium IDE} - snimanje korisnikovih akcija radi automatskog ponavljanja ispita	}
-			 	\item \textit{\textbf{Selenium WebDriver} - podrška za pisanje ispita u jezicima Java, C\#, PHP koristeći posebno programsko sučelje.}
-			 \end{itemize}
-		 	\textit{Detalji o korištenju alata Selenium bit će prikazani na posebnom predavanju tijekom semestra.}
+			\subsubsection{Ispitni slučaj 1: Ispravna prijava u sustav}
+			
+			
+			\noindent {\textbf{Ulaz:}}
+			\begin{packed_enum}
+				
+				\item  Otvaranje početne stranice u web pregledniku.
+				\item  Pritisak na gumb \textbf{Login} u gornjem desnom kutu.
+				\item  Ispravno ispunjavanje forme za prijavu.
+				\item  Pritisak na gumb \textbf{Submit}. 
+				
+			\end{packed_enum}
+			
+			\noindent {\textbf{Očekivani rezultat:}}
+			\begin{packed_enum}
+				
+				\item  Prikaz početne stranice korisnika. 
+				
+			\end{packed_enum}
+			
+			\noindent \textbf{Rezultat:} Očekivani rezultat [1.] je zadovoljen jer je korisnik ispravno unio podatke. \textbf{Aplikacija je prošla test.}
+			
+			\begin{figure}[H]
+				\includegraphics[scale=0.38]{slike/screenshot_test_result.PNG}
+				\centering
+				\caption{Uspješna prijava}
+				\label{fig:sucess_login}
+			\end{figure}
+			
+			\subsubsection{Ispitni slučaj 2: Neispravna prijava u sustav}
+			
+			
+			\noindent {\textbf{Ulaz:}}
+			\begin{packed_enum}
+				
+				\item  Otvaranje početne stranice u web pregledniku.
+				\item  Pritisak na gumb \textbf{Login} u gornjem desnom kutu.
+				\item  Ispunjavanje forme za prijavu.
+				\item  Pritisak na gumb \textbf{Submit}. 
+				
+			\end{packed_enum}
+			
+			\noindent {\textbf{Očekivani rezultat:}}
+			\begin{packed_enum}
+				
+				\item  Prikaz oblačića sa tekstom koji govori da je pogrešno unesena zaporka ili e-pošta/korisničko ime. 
+				
+			\end{packed_enum}
+			
+			\noindent \textbf{Rezultat:} Očekivani rezultat [1.] je zadovoljen jer je korisnik unio pogrešnu zaporku. \textbf{Aplikacija je prošla test.}
+			
+			\begin{figure}[H]
+				\includegraphics[scale=0.38]{slike/failed_login.PNG}
+				\centering
+				\caption{Neuspješna prijava}
+				\label{fig:failed_login}
+			\end{figure}
+			
+			\subsubsection{Ispitni slučaj 3: Ispravna registracija novog korisnika}
+			
+			
+			\noindent {\textbf{Ulaz:}}
+			\begin{packed_enum}
+				
+				\item  Otvaranje početne stranice u web pregledniku.
+				\item  Pritisak na gumb \textbf{Register} u gornjem desnom kutu.
+				\item  Ispunjavanje forme za registraciju.
+				\item  Pritisak na gumb \textbf{Submit}. 
+				
+			\end{packed_enum}
+			
+			\noindent {\textbf{Očekivani rezultat:}}
+			\begin{packed_enum}
+				
+				\item  Uspješno slanje forme za kreaciju novog korisnika.
+				\item  Dobitak e-pošte za verifikaciju novog računa.
+				
+			\end{packed_enum}
+			
+			\noindent \textbf{Rezultat:} Očekivani rezultati [1., 2.] su zadovoljeni jer je korisnik ispravno unio podatke koji su traženi, te nije unio e-poštu koja se od prije koristi. \textbf{Aplikacija je prošla test.}
+			
+			\begin{figure}[H]
+				\includegraphics[scale=0.38]{slike/registration_new_user_test:result.PNG}
+				\centering
+				\caption{Uspješna registracija}
+				\label{fig:sucess_register}
+			\end{figure}
+			
+			\subsubsection{Ispitni slučaj 4: Neispravna registracija novog korisnika}
+			
+			
+			\noindent {\textbf{Ulaz:}}
+			\begin{packed_enum}
+				
+				\item  Otvaranje početne stranice u web pregledniku.
+				\item  Pritisak na gumb \textbf{Register} u gornjem desnom kutu.
+				\item  Neispravno ispunjavanje forme za registraciju (korištenje e-pošte koja se već nalazi u sustavu).
+				\item  Pritisak na gumb \textbf{Submit}. 
+				
+			\end{packed_enum}
+			
+			\noindent {\textbf{Očekivani rezultat:}}
+			\begin{packed_enum}
+				
+				\item  Neuspješno slanje forme za kreaciju novog korisnika.
+				\item  Prikaz oblačića sa tekstom koji govori da se e-pošta već koristi.
+				
+			\end{packed_enum}
+			
+			\noindent \textbf{Rezultat:} Očekivani rezultati [1., 2.] su zadovoljeni jer je korisnik unio e-poštu koja se već koristi. \textbf{Aplikacija je prošla test.}
+			
+			\begin{figure}[H]
+				\includegraphics[scale=0.38]{slike/registration_new_user_test:result.PNG}
+				\centering
+				\caption{Uspješna registracija}
+				\label{fig:failed_register}
+			\end{figure}
+			
+			\subsubsection{Ispitni slučaj 5: Uspješno kreiranje zadatka}
+			
+			
+			\noindent {\textbf{Ulaz:}}
+			\begin{packed_enum}
+				
+				\item  Prikaz početne stranice voditelja (samo voditelj ima opciju kreacije zadatka).
+				\item  Pritisak na gumb \textbf{New Problem}.
+				\item  Prikaz forme za kreaciju problema.
+				\item  Ispravno ispunjavanje forme za kreaciju zadatka.
+				
+			\end{packed_enum}
+			
+			\noindent {\textbf{Očekivani rezultat:}}
+			\begin{packed_enum}
+				
+				\item  Uspješna kreacija novog zadatka.
+				
+			\end{packed_enum}
+			
+			\noindent \textbf{Rezultat:} Očekivani rezultat [1.] je zadovoljen jer je korisnik ispravno ispunio formu za izradu novog zadatka. \textbf{Aplikacija je prošla test.}
+			
+			\begin{figure}[H]
+				\includegraphics[scale=0.38]{slike/create_problem_test.PNG}
+				\centering
+				\caption{Uspješna izrada novog zadatka}
+				\label{fig:sucess_new_problem}
+			\end{figure}
+			
+			\subsubsection{Ispitni slučaj 6: Neuspješno kreiranje zadatka}
+			
+			
+			\noindent {\textbf{Ulaz:}}
+			\begin{packed_enum}
+				
+				\item  Prikaz početne stranice voditelja (samo voditelj ima opciju kreacije zadatka).
+				\item  Pritisak na gumb \textbf{New Problem}.
+				\item  Prikaz forme za kreaciju problema.
+				\item  Neispravno ispunjavanje forme za kreaciju zadatka (broj bodova zadatka ne smije biti nula).
+				
+			\end{packed_enum}
+			
+			\noindent {\textbf{Očekivani rezultat:}}
+			\begin{packed_enum}
+				
+				\item  Prikaz oblačića sa tekstom koji govori da broj bodova zadatka ne smije biti jednak nuli.
+				
+			\end{packed_enum}
+			
+			\noindent \textbf{Rezultat:} Očekivani rezultat [1.] je zadovoljen jer je korisnik neispravno ispunio formu za izradu novog zadatka. \textbf{Aplikacija je prošla test.}
+			
+			\begin{figure}[H]
+				\includegraphics[scale=0.38]{slike/create_problem_test_wrong.PNG}
+				\centering
+				\caption{Neuspješna izrada novog zadatka}
+				\label{fig:failed_new_problem}
+			\end{figure}
+			
+			\subsubsection{Ispitni slučaj 7: Uspješna odjava korisnika}
+			
+			
+			\noindent {\textbf{Ulaz:}}
+			\begin{packed_enum}
+				
+				\item  Pritisak na gumb \textbf{Logout} na stranici korisnika.
+				
+			\end{packed_enum}
+			
+			\noindent {\textbf{Očekivani rezultat:}}
+			\begin{packed_enum}
+				
+				\item  Prikaz stranice za prijavu u sustav.
+				
+			\end{packed_enum}
+			
+			\noindent \textbf{Rezultat:} Očekivani rezultat [1.] je zadovoljen. \textbf{Aplikacija je prošla test.}
+			
+			\begin{figure}[H]
+				\includegraphics[scale=0.38]{slike/create_problem_test_wrong.PNG}
+				\centering
+				\caption{Uspješna odjava}
+				\label{fig:sucess_logout}
+			\end{figure}
+			
 			
 			\eject 
 		
