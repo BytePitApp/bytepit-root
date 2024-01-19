@@ -46,8 +46,8 @@
 		
 		Za implementaciju našeg sustava koristit ćemo PostgreSQL, relacijsku bazu podataka. Ovaj tip baze podataka posebno je pogodan za modeliranje kompleksnih struktura koje odražavaju realni svijet, zahvaljujući svojoj sposobnosti da efikasno upravlja relacijama, odnosno tablicama. Svaka tablica u bazi unikatno je definirana svojim nazivom i skupom atributa, čime se omogućava precizno strukturiranje podataka. Jedna od ključnih prednosti PostgreSQL baze je njena brzina i efikasnost u obradi podataka, uključujući pohranu, ažuriranje i dohvaćanje informacija. Naša baza podataka obuhvatit će niz entiteta koji su specifično prilagođeni zahtjevima naše aplikacije.
 		
-		\textit{Popis entiteta: users, competitions, problems, competition\_participations, problems\_on\_competitions, 
-			problem\_results, trophies i verification\_tokens.}
+		\noindent Popis entiteta: users, competitions, problems, competition\_participations, problems\_on\_competitions, 
+			problem\_results, trophies i verification\_tokens.
 		
 		
 		\eject
@@ -99,7 +99,7 @@
 		
 		\subsubsection*{Problems\_on\_competitions}
 		
-		Entitet \textbf{problems\_on\_competitions} sadržava informacije o zadacima koji pripadaju pojedinim natjecanjima. Sadržava atribute: \textit{id, problem\_id, competition\_id, num\_of\_points}.
+		Entitet \textbf{problems\_on\_competitions} sadržava informacije o zadacima koji pripadaju pojedinim natjecanjima. Ovaj entitet je u \textit{many-to-many} vezi s entitetom \textit{competitions} preko atributa \textit{competition\_id}, te također u \textit{many-to-many} vezi sa entitetom \textit{problems} preko atributa \textit{problem\_id}. Sadržava atribute: \textit{id, problem\_id, competition\_id, num\_of\_points}.
 		
 		\begin{figure}[htbp]
 			\centering
@@ -158,48 +158,90 @@
 		
 			
 			
-			Na sljedećim slikama prikazani su dijagrami razreda koji pripadaju backend dijelu aplikacije.
+			Na sljedećim slikama, 4.10, 4.11, 4.12 i 4.13 prikazani su dijagrami razreda koji pripadaju backend dijelu aplikacije. Treba napomenuti kako ovaj tip dijagrama nije prikladan za naš tip arhitekture API-ja. Naime, ovaj tip podataka je odličan za arhitekture u kojima se dosljedno prati REST model, gdje svaka operacija u pravilu mijenja jedan resurs (entitet). S druge strane, naša arhitektura se temelji na action-based (verb-based) RPC-evima (remote procedure call), te samim time dijagrami razreda temeljeni na entitetima nemaju smisla. No ipak, s obzirom da je ovo obavezan dio dokumentacije, napravili smo pseudo-dijagram u kojem su aktori zapravo naši API routeri.  
+			Na slici 4.10 prikazani su ruteri logički podijeljeni metodama određenih aktora. Tako imamo "Users Router", "Admin Router" i "Auth Router" koje sve sadrži API (glavni dio backenda aplikacije). Metode implementirane u tim klasama manipuliraju podacima iz baze i podacima o trenutnom korisniku (web token i ostali podaci u kolačiću).
 			
-			\begin{figure}[htbp]
+			\begin{figure}[H]
 				\centering
 				\includegraphics[width=\linewidth]{slike/dijagram_razreda.png}
+				\label{fig:implenetacija1}
+				\caption{Dijagram razreda - Dio Controllers}
 			\end{figure}
 			
+			\eject
 			
+			Modeli razreda, odnosno DTO (Data transfer object) služe za komunikaciju i prijenos podataka i baze u aplikaciju i obratno. Kada se korisnik bez korisničkog računa registrira, aplikacija koristi \textbf{RegistrationFormDTO} dok se pri prijavi korisnika s postojećim računom koristi \textbf{LoginFormDTO}. Kada se kreira korisnički račun, aplikacija za njegov prikaz i spremanje u bazu koristi \textbf{UserDTO}. Pri izradi natjecanja se koristi \textbf{ProblemsDTO}, a za kreiranje natjecanja \textbf{CreateCompetitionDTO}. Kada korisnik ide predati svoje rješenje zadatka na natjecanju, koristi se \textbf{CreateSubmissionDTO}. Za prikaz rezultata natjecanja koristimo \textbf{CompetitionResultDTO}, za izmjenu postojećih natjecanja, odnosno problema koriste se \textbf{ModifyCompetitionDTO} i \textbf{ModifyProblemDTO}. Trofeji se prikazuju pomoću \textbf{TrophyDTO}, korisnikova statistika sa \textbf{UserStatisticsDTO}.
 
-			\begin{figure}[htbp]
+			\begin{figure}[H]
 				\centering
 				\includegraphics[width=\linewidth]{slike/dto.png}
+				\caption{Dijagram razreda - DTO dio 1}
+				\label{fig:implenetacija2}
+			\end{figure}
+			
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=\linewidth]{slike/dto_2.png}
+				\caption{Dijagram razreda - DTO dio 2}
+				\label{fig:implenetacija3}
 			\end{figure}
 			\eject
 			
-			\textbf{\textit{dio 2. revizije}}\\			
-			
-			\textit{Prilikom druge predaje projekta dijagram razreda i opisi moraju odgovarati stvarnom stanju implementacije}
-			
-			
+			\begin{figure}[H]
+				\includegraphics[width=\linewidth]{slike/ImplementacijskiDijagramRazreda}
+				\centering
+				\caption{Dijagram razreda - implementacijski dijagram}
+				\label{fig:implementacija4}
+			\end{figure}
 			
 			\eject
 		
 		\section{Dijagram stanja}
+
+			Dijagram stanja prikazuje stanja objekta te prijelaze iz jednog stanja u drugo temeljene na događajima.
+			Na slici je prikazan dijagram stanja registriranog korisnika.
+			Nakon prijave, klijentu se prikazuje početna stranica na kojoj ima opciju pregleda profila natjecatelja i voditelja te opciju pregleda kalendara s natjecanjima. Nakon klika na profile natjecatelja, korisnik može pregledat njihovu statistiku sa svih natjecanja. 
+			Natjecatelj može sudjelovati u natjecanju i rješavati zadatke te predati rješenje zadatka. Nakon predaje svog rješenja zadataka, ima opciju pregleda popisa svih učitanih rješenja za pojedine zadatke.
+			Voditelji imaju opciju upravljanja natjecanja u kojemu mogu stvarati nova natjecanja ili kreirati nove zadatke.
 			
-			
-			\textbf{\textit{dio 2. revizije}}\\
-			
-			\textit{Potrebno je priložiti dijagram stanja i opisati ga. Dovoljan je jedan dijagram stanja koji prikazuje \textbf{značajan dio funkcionalnosti} sustava. Na primjer, stanja korisničkog sučelja i tijek korištenja neke ključne funkcionalnosti jesu značajan dio sustava, a registracija i prijava nisu. }
-			
+				
+			\begin{figure}[H]
+				\includegraphics[width=\linewidth]{slike/dijagram_stanja.png} 
+				\centering
+				\caption{Dijagram stanja}
+				\label{fig:stanja}
+			\end{figure}
 			
 			\eject 
 		
 		\section{Dijagram aktivnosti}
 			
-			\textbf{\textit{dio 2. revizije}}\\
+			Dijagram aktivnosti prikazuje proces rješavanja jednog zadatka od prijave u sustav pa sve do predaje rješenja. Korisnik otvara web aplikaciju i unosi svoje pristupne podatke. Web aplikacija šalje upit bazi podataka radi provjere pristupnih podataka korisnika. Ako su pristupni podaci ispravni, korisnik je uspješno prijavljen, inače se vraća na stranicu za prijavu. Web aplikacija prikazuje dostupne zadatke korisniku. Korisnik pregledava dostupne zadatke i odabire zadatak koji želi riješiti. Web aplikacija šalje upit bazi podataka za dohvat podataka odabranog zadatka. Podaci zadatka se prikazuju korisniku. Korisnik rješava zadani zadatak i predaje svoje rješenje putem web aplikacije. Web aplikacija šalje rješenje korisnika compileru. Aplikacija preuzima testne podatke iz blob storagea, šalje ih compileru koji izvršava program s korisnikovim rješenjem. Rezultati izvršavanja programa vraćaju se web aplikaciji. Rezultati izvršavanja programa prikazuju se korisniku, uključujući informacije o ispravnosti rješenja i ostale relevantne informacije. Ako je korisnik zadovoljan rezultatima, može ponovno predati drugo rješenje ili poslati zahtjev za konačnom predajom zadatka. Ako korisnik želi konačno predati rješenje, proces završava.
+			\eject
 			
-			 \textit{Potrebno je priložiti dijagram aktivnosti s pripadajućim opisom. Dijagram aktivnosti treba prikazivati značajan dio sustava.}
-			
+			\begin{figure}[H]
+				\includegraphics[width=\linewidth]{slike/DijagramAktivnosti.png}
+				\centering
+				\caption{Dijagram aktivnosti}
+				\label{fig:aktivnost}
+			\end{figure}
 			\eject
 		\section{Dijagram komponenti}
 		
-			\textbf{\textit{dio 2. revizije}}\\
 		
-			 \textit{Potrebno je priložiti dijagram komponenti s pripadajućim opisom. Dijagram komponenti treba prikazivati strukturu cijele aplikacije.}
+			Slika 4.16 prikazuje dijagram komponenti koji ilustrira kako su komponente organizirane međusobno, unutar sustava te kako su povezane s okolinom. Sustavu se pristupa kroz dva sučelja. 
+			
+			Prvo sučelje ima funkciju prikupljanja Typescript datoteka koje pripadaju frontend dijelu aplikacije. Ključnu ulogu ima Router, određujući koje će datoteke biti poslužene na sučelju. Frontend se sastoji od niza cjelina organiziranih prema tipovima korisnika, a Typescript datoteke koriste React, Tailwind i Primereact biblioteke za integraciju već pripremljenih komponenata.
+			
+			Drugo sučelje ima ulogu u preuzimanju JSON podataka i pristupanju REST API komponentama koje poslužuju podatke iz backend dijela aplikacije. DatabaseFileRetrieval zadatak ima dohvaćanje datoteka iz baze podataka korištenjem SQL upita, a zatim ti podaci putuju prema DTO-u. Reactview komponenta komunicira s ostatkom aplikacije putem dostupnih sučelja. Sustav uključuje Evaluator komponentu koja komunicira s BLOB storage-om i odgovorna je za evaluaciju rješenja zadataka. Evaulator koristi Compiler kako bi doznao ispis korisnikova koda, te ga uspoređuje sa ispravnim koji je na BLOB storage-u. Ovaj dio sustava doprinosi skalabilnosti, efikasnosti i fleksibilnosti u upravljanju podacima.
+			 
+			 \eject
+			 
+			 \begin{figure}[H]
+			 	\includegraphics[scale=0.38]{slike/Dijagram_komp.PNG} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+			 	\centering
+			 	\caption{Dijagram komponenti}
+			 	\label{fig:komponente}
+			 \end{figure}
+			 
+			 \eject

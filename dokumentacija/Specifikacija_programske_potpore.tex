@@ -25,6 +25,9 @@
 					\item pregledati natjecanja
 					\item pregledati zadatke
 					\item mijenjati prava korisnicima
+					\item promjena podataka korisnika
+					\item uređivanje zadataka
+					\item uređivanje natjecanja
 					
 				\end{packed_enum}
 			
@@ -33,7 +36,6 @@
 				\begin{packed_enum}
 					
 					\item se registrirati u sustav
-					\item stvoriti novi korisnički račun
 					
 				\end{packed_enum}
 
@@ -55,6 +57,8 @@
 					\item pregledati svoje osobne podatke
 					\item pregledati zadatke
 					\item predati rješenje zadatka
+					\item izrada virtualnog natjecanja
+					\item pregled rješenja zadataka
 					
 				\end{packed_enum}
 
@@ -81,7 +85,7 @@
 					\noindent \underbar{\textbf{UC1 - Pregled početne stranice}}
 					\begin{packed_item}
 	
-						\item \textbf{Glavni sudionik: }Natjecatelj, voditelj, neregistrirani korisnik
+						\item \textbf{Glavni sudionik: }Korisnik
 						\item  \textbf{Cilj:} Odlučiti se za opciju registracije ili prijave
 						\item  \textbf{Sudionici:} Baza podataka
 						\item  \textbf{Preduvjet:} -
@@ -134,7 +138,7 @@
 					\noindent \underbar{\textbf{UC3 - Prijava u sustav}}
 					\begin{packed_item}
 						
-						\item \textbf{Glavni sudionik: }Natjecatelj, voditelj
+						\item \textbf{Glavni sudionik: }Registrirani korisnik
 						\item  \textbf{Cilj:} Prijava u sustav i pristup korisničkom sučelju 
 						\item  \textbf{Sudionici:} Baza podataka
 						\item  \textbf{Preduvjet:} Registracija
@@ -237,7 +241,7 @@
 						
 						\item \textbf{Glavni sudionik: }Natjecatelj
 						\item  \textbf{Cilj:} Prikazati natjecatelju zadatke za odabrano natjecanje
-						\item  \textbf{Sudionici:} Baza podataka, natjecatelj
+						\item  \textbf{Sudionici:} Baza podataka
 						\item  \textbf{Preduvjet:} Korisnik je prijavljen u sustav i postoji natjecanje u kojem može sudjelovati
 						\item  \textbf{Opis osnovnog tijeka:}
 						
@@ -268,7 +272,7 @@
 						
 						\item \textbf{Glavni sudionik: }Voditelj
 						\item  \textbf{Cilj:} Voditelj stvara natjecanje  
-						\item  \textbf{Sudionici:} Baza podataka, voditelj
+						\item  \textbf{Sudionici:} Baza podataka
 						\item  \textbf{Preduvjet:} Korisnik je prijavljen u sustav i odobren kao voditelj
 						\item  \textbf{Opis osnovnog tijeka:}
 						
@@ -298,7 +302,7 @@
 						
 						\item \textbf{Glavni sudionik: }Voditelj
 						\item  \textbf{Cilj:} Voditelj stvara zadatak 
-						\item  \textbf{Sudionici:} Baza podataka, voditelj
+						\item  \textbf{Sudionici:} Baza podataka
 						\item  \textbf{Preduvjet:} Korisnik je prijavljen u sustav i odobren kao voditelj
 						\item  \textbf{Opis osnovnog tijeka:}
 						
@@ -306,7 +310,7 @@
 							
 							\item Voditelj ispunjava formu za izradu zadatka
 							\item Voditelj unosi naziv, opis zadatka, testne primjere, broj bodova koji nosi zadatak te ih prosljeđuje sustavu
-							\item Voditelj opciju privatnog zadatka, on će postati javan tek nakon završetka natjecanja
+							\item Voditelj odabire opciju privatnog zadatka, on će postati javan tek nakon završetka natjecanja
 							\item Sustav pohranjuje zadatak u bazu podataka
 							
 						\end{packed_enum}
@@ -332,7 +336,7 @@
 						
 						\item \textbf{Glavni sudionik: }Natjecatelj
 						\item  \textbf{Cilj:} Natjecatelj predaje svoje rješenje zadatka 
-						\item  \textbf{Sudionici:} Baza podataka, natjecatelj
+						\item  \textbf{Sudionici:} Baza podataka
 						\item  \textbf{Preduvjet:} Korisnik je prijavljen u sustav 
 						\item  \textbf{Opis osnovnog tijeka:}
 						
@@ -386,7 +390,7 @@
 						
 						\item \textbf{Glavni sudionik: }Natjecatelj
 						\item  \textbf{Cilj:} Natjecatelj ima mogućnost vježbanja već objavljenih zadataka 
-						\item  \textbf{Sudionici:} Baza podataka, natjecatelj
+						\item  \textbf{Sudionici:} Baza podataka
 						\item  \textbf{Preduvjet:} Korisnik je prijavljen u sustav
 						\item  \textbf{Opis osnovnog tijeka:}
 						
@@ -417,7 +421,7 @@
 						
 						\item \textbf{Glavni sudionik: }Natjecatelj
 						\item  \textbf{Cilj:} Natjecatelj ima mogućnost vježbanja na već objavljenim natjecanjima
-						\item  \textbf{Sudionici:} Baza podataka, natjecatelj
+						\item  \textbf{Sudionici:} Baza podataka
 						\item  \textbf{Preduvjet:} Korisnik je prijavljen u sustav
 						\item  \textbf{Opis osnovnog tijeka:}
 						
@@ -438,7 +442,7 @@
 						
 						\item \textbf{Glavni sudionik: }Natjecatelj
 						\item  \textbf{Cilj:} Natjecatelj ima mogućnost vježbanja natjecanja uz pomoć objavljenih zadataka simuliranih u natjecanje
-						\item  \textbf{Sudionici:} Baza podataka, natjecatelj
+						\item  \textbf{Sudionici:} Baza podataka
 						\item  \textbf{Preduvjet:} Korisnik je prijavljen u sustav
 						\item  \textbf{Opis osnovnog tijeka:}
 						
@@ -474,7 +478,7 @@
 						
 						\item \textbf{Glavni sudionik: }Voditelj
 						\item  \textbf{Cilj:} Mogućnost izmjene zadataka i natjecanja koje je napravio voditelj
-						\item  \textbf{Sudionici:} Baza podataka, voditelj
+						\item  \textbf{Sudionici:} Baza podataka
 						\item  \textbf{Preduvjet:} Korisnik je prijavljen u sustav i odobren je kao voditelj
 						\item  \textbf{Opis osnovnog tijeka:}
 						
@@ -583,7 +587,7 @@
 						
 						\item \textbf{Glavni sudionik: }Administrator
 						\item  \textbf{Cilj:} Administrator potvrđuje voditelja 
-						\item  \textbf{Sudionici:} Baza podataka, voditelj
+						\item  \textbf{Sudionici:} Baza podataka
 						\item  \textbf{Preduvjet:} Korisnik je prijavljen u sustav i ima prava administratora
 						\item  \textbf{Opis osnovnog tijeka:}
 						
@@ -622,7 +626,7 @@
 				\vspace{10mm}
 				\subsubsection*{UC9 Kreiranje natjecanja}
 				
-				Voditelj natjecanja započinje proces kreiranja natjecanja slanjem zahtjeva poslužitelju. Poslužitelj provjerava informacije o korisniku u bazi podataka kako bi utvrdila je li korisnik ovlašten za kreiranje natjecanja. Ako je korisnik voditelj natjecanja na web-aplikaciji otvara se forma za izradu natjecanja, voditelj šalje zahtjev za popis dostupnih zadataka, poslužitelj ih dohvaća iz baze podataka i prikazuje ih voditelju. Zatim voditelj odabire željene zadatke i kreira natjecanje. Poslužitelj sprema informacije o natjecanju u bazu podataka i šalje povratnu informaciju voditelju o uspješnom kreiranju natjecanja. Ako korisnik nije voditelj natjecanja poslužitelj šalje odgovor voditelju da samo voditelji natjecanja mogu kreirati zadatke.
+				Voditelj natjecanja započinje proces kreiranja natjecanja slanjem zahtjeva poslužitelju. Poslužitelj provjerava informacije o korisniku u bazi podataka kako bi utvrdila je li korisnik ovlašten za kreiranje natjecanja. Ako je korisnik voditelj natjecanja na web-aplikaciji otvara se forma za izradu natjecanja, voditelj šalje zahtjev za popis dostupnih zadataka, poslužitelj ih dohvaća iz baze podataka i prikazuje ih voditelju. Zatim voditelj odabire željene zadatke i kreira natjecanje. Poslužitelj sprema informacije o natjecanju u bazu podataka i šalje povratnu informaciju voditelju o uspješnom kreiranju natjecanja. Ako korisnik nije voditelj natjecanja poslužitelj šalje odgovor voditelju da samo voditelji natjecanja mogu kreirati natjecanja.
 				\vspace{20mm}
 
 				\begin{figure}[htbp]
@@ -669,7 +673,7 @@
 				\item Upotreba gotove aplikacije zamišljena je preko web preglednika
 				\item Aplikacija mora implementirati autentikaciju i autorizaciju svakog korisnika
 				\item Osjetljivi podaci od korisnika se moraju pretvarati u hash prije spremanja u bazu
-				\item Greška u jednom djelu sustava ne smije onemogućiti korištenje drugih usluga
+				\item Greška u jednom dijelu sustava ne smije onemogućiti korištenje drugih usluga
 				\item Odgovori sustava prema korisniku moraju biti brzi i ne dulji od nekoliko sekundi
 			\end{packed_item}
 			 
