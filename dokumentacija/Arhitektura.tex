@@ -46,8 +46,8 @@
 		
 		Za implementaciju našeg sustava koristit ćemo PostgreSQL, relacijsku bazu podataka. Ovaj tip baze podataka posebno je pogodan za modeliranje kompleksnih struktura koje odražavaju realni svijet, zahvaljujući svojoj sposobnosti da efikasno upravlja relacijama, odnosno tablicama. Svaka tablica u bazi unikatno je definirana svojim nazivom i skupom atributa, čime se omogućava precizno strukturiranje podataka. Jedna od ključnih prednosti PostgreSQL baze je njena brzina i efikasnost u obradi podataka, uključujući pohranu, ažuriranje i dohvaćanje informacija. Naša baza podataka obuhvatit će niz entiteta koji su specifično prilagođeni zahtjevima naše aplikacije.
 		
-		\textit{Popis entiteta: users, competitions, problems, competition\_participations, problems\_on\_competitions, 
-			problem\_results, trophies i verification\_tokens.}
+		\noindent Popis entiteta: users, competitions, problems, competition\_participations, problems\_on\_competitions, 
+			problem\_results, trophies i verification\_tokens.
 		
 		
 		\eject
@@ -99,7 +99,7 @@
 		
 		\subsubsection*{Problems\_on\_competitions}
 		
-		Entitet \textbf{problems\_on\_competitions} sadržava informacije o zadacima koji pripadaju pojedinim natjecanjima. Sadržava atribute: \textit{id, problem\_id, competition\_id, num\_of\_points}.
+		Entitet \textbf{problems\_on\_competitions} sadržava informacije o zadacima koji pripadaju pojedinim natjecanjima. Ovaj entitet je u \textit{many-to-many} vezi s entitetom \textit{competitions} preko atributa \textit{competition\_id}, te također u \textit{many-to-many} vezi sa entitetom \textit{problems} preko atributa \textit{problem\_id}. Sadržava atribute: \textit{id, problem\_id, competition\_id, num\_of\_points}.
 		
 		\begin{figure}[htbp]
 			\centering
@@ -158,7 +158,8 @@
 		
 			
 			
-			Na sljedećim slikama, 4.10, 4.11, 4.12 i 4.13 prikazani su dijagrami razreda koji pripadaju backend dijelu aplikacije. Na slici 4.10 prikazani su ruteri logički podijeljeni metodama određenih aktora. Tako imamo "Users Router", "Admin Router" i "Auth Router" koje sve sadrži API (glavni dio backenda aplikacije). Metode implementirane u tim klasama manipuliraju podacima iz baze i podacima o trenutnom korisniku (web token i ostali podaci u kolačiću).
+			Na sljedećim slikama, 4.10, 4.11, 4.12 i 4.13 prikazani su dijagrami razreda koji pripadaju backend dijelu aplikacije. Treba napomenuti kako ovaj tip dijagrama nije prikladan za naš tip arhitekture API-ja. Naime, ovaj tip podataka je odličan za arhitekture u kojima se dosljedno prati REST model, gdje svaka operacija u pravilu mijenja jedan resurs (entitet). S druge strane, naša arhitektura se temelji na action-based (verb-based) RPC-evima (remote procedure call), te samim time dijagrami razreda temeljeni na entitetima nemaju smisla. No ipak, s obzirom da je ovo obavezan dio dokumentacije, napravili smo pseudo-dijagram u kojem su aktori zapravo naši API routeri.  
+			Na slici 4.10 prikazani su ruteri logički podijeljeni metodama određenih aktora. Tako imamo "Users Router", "Admin Router" i "Auth Router" koje sve sadrži API (glavni dio backenda aplikacije). Metode implementirane u tim klasama manipuliraju podacima iz baze i podacima o trenutnom korisniku (web token i ostali podaci u kolačiću).
 			
 			\begin{figure}[H]
 				\centering
@@ -228,7 +229,7 @@
 		\section{Dijagram komponenti}
 		
 		
-			Slika 4.10 prikazuje dijagram komponenti koji ilustrira kako su komponente organizirane međusobno, unutar sustava te kako su povezane s okolinom. Sustavu se pristupa kroz dva sučelja. 
+			Slika 4.16 prikazuje dijagram komponenti koji ilustrira kako su komponente organizirane međusobno, unutar sustava te kako su povezane s okolinom. Sustavu se pristupa kroz dva sučelja. 
 			
 			Prvo sučelje ima funkciju prikupljanja Typescript datoteka koje pripadaju frontend dijelu aplikacije. Ključnu ulogu ima Router, određujući koje će datoteke biti poslužene na sučelju. Frontend se sastoji od niza cjelina organiziranih prema tipovima korisnika, a Typescript datoteke koriste React, Tailwind i Primereact biblioteke za integraciju već pripremljenih komponenata.
 			
