@@ -3,10 +3,10 @@
 		
 		\section{Korištene tehnologije i alati}
 		
-			Komunikacija u timu ostvarena je kombinacijom \textbf{Atlassin Jira}, \textbf{Atlassin Confluence} i \textbf{WhatsApp}. Za upravljanje kodom korišten je sustav \textbf{Git} i web platforma \textbf{GitHub} za pregled udaljenog repozitorija i bolje snalaženje u projektu.
-			Kao razvojno okruženje korišteni su \textbf{Microsoft Visual Studio Code} i \textbf{JetBrains PyCharm}. Microsoft Visual Studio Code pruža integrirano razvojno okruženje (IDE) koje podržava različite programske jezike, uključujući C++, Python i mnoge druge. Ovo okruženje dolazi s alatima za uređivanje koda, debugiranje i upravljanje datotekama i kontejnerima.
+			Komunikacija u timu ostvarena je kombinacijom \textbf{Atlassian Jira}, \textbf{Atlassian Confluence} i \textbf{WhatsApp}. Za upravljanje kodom korišten je sustav \textbf{Git} i web platforma \textbf{GitHub} za pregled udaljenog repozitorija i bolje snalaženje u projektu.
+			Kao razvojno okruženje korišteni su \textbf{Microsoft Visual Studio Code} i \textbf{JetBrains PyCharm}. Microsoft Visual Studio Code je code editor koji podržava različite programske jezike, uključujući C++, Python i mnoge druge. Ovo okruženje dolazi s alatima za uređivanje koda, debugiranje i upravljanje datotekama i kontejnerima.
 			S druge strane, \textbf{JetBrains PyCharm} je posebno usmjeren na podršku Python razvoju. Ovaj IDE pruža bogat skup značajki, uključujući pametno završavanje koda, analizu koda, integrirano upravljanje verzijama, i podršku za virtualno okruženje. Korištenjem ova dva razvojna okruženja, tim je imao pristup snažnim alatima za učinkovit i produktivan razvoj softvera.
-			Aplikacija je napisana koristeći radni okvir \textbf{FastApi} koji se koristi za izradu REST API-ja u pythonu. Za izradu \textit{frontenda} koristili smo \textbf{React} i \textbf{TypeScript}. Prednost \textbf{TypeScripta} nad običnim \textbf{Javascriptom} je u njegovoj mogućnosti definiranja tipa varijabli i posljedično tome, lakšem rukovanju greškama i boljom kontrolom varijabli.
+			Aplikacija je napisana koristeći radni okvir \textbf{FastAPI} koji se koristi za izradu API-ja u pythonu. Za izradu \textit{frontenda} koristili smo \textbf{React} i \textbf{TypeScript}. Prednost \textbf{TypeScripta} nad običnim \textbf{JavaScriptom} je u njegovoj mogućnosti definiranja tipa varijabli i posljedično tome, lakšem rukovanju greškama i boljom kontrolom varijabli.
 			Za izradu kontejnera je korišten \textbf{Docker}, a sve je stavljeno na poslužitelja u oblaku na \textbf{Microsoft Azure}.
 			
 			
@@ -285,7 +285,7 @@
 
 			 Dijagrami razmještaja opisuju topologiju sklopovlja i programsku potporu koja se koristi u implementaciji sustava u njegovom radnom okruženju.
 			 Na azure app service-u nalaze se API sa evaluatorom rješenja, poslužitelj baze podataka (azure sql database) te third party servis za kompajliranje koda.
-			 Klijenti koriste web preglednik za pristup web aplikaciji. Sustav je baziran na REST API arhitekturi, a komunikacija između klijenta i poslužitelja odvija se preko HTTP veze.
+			 Klijenti koriste web preglednik za pristup web aplikaciji. Sustav je baziran na kombiniranoj RPC i REST API arhitekturi, a komunikacija između klijenta i poslužitelja odvija se preko HTTP veze.
 
 			 
 			
@@ -301,7 +301,7 @@
 		
 			\textbf{Pokretanje backend-a i baze podataka}\\
 			
-				\noindent Potrebno je preuzeti i instalirati aplikaciju \href{https://www.docker.com/products/docker-desktop/}{Docker Desktop} uz pomoć koje se pokreću container-i za backend i bazu podataka. Nakon preuzimanja aplikacije moramo se u terminalu navigirati do direktorija \textit{bytepit-root} unutar kojeg se nalazi docker-compose datoteka koja sadrži informacije za pokretanje. Pri prvom pokretanju potrebno je nekoliko minuta za podizanje.\\
+				\noindent Potrebno je klonirati sve projekte iz GitHub organizacije \href{https://github.com/ProgiRade}{ProgiRade}. Na Windowsu je potrebno preuzeti i instalirati aplikaciju \href{https://www.docker.com/products/docker-desktop/}{Docker Desktop} uz pomoć koje se pokreću containeri za backend i bazu podataka. Nakon preuzimanja aplikacije potrebno je u terminalu navigirati do direktorija \textit{bytepit-root} unutar kojeg se nalazi docker-compose datoteka koja sadrži informacije za pokretanje. Pri prvom pokretanju potrebno je nekoliko minuta za podizanje.\\
 				Unutar terminala koristimo naredbu: \textbf{docker-compose up --build}
 				\begin{figure}[H]
 					\includegraphics[scale=0.45]{slike/docker_desktop.PNG} 
@@ -310,6 +310,7 @@
 					\label{fig:docker_desktop}
 				\end{figure}
 				\noindent Pri prvom pokretanju unutar baze neće biti kreirane potrebne tablice, ali ih možemo kreirati uz pomoć datoteke \textbf{ddl.sql} koja se nalazi unutar direktorija \textit{bytepit-root}. Unutar aplikacije Docker Desktop možemo kliknuti na opcije od baze (tri uspravne točkice ispod zaglavlja Actions), te odabrati opciju \textbf{Open in terminal} uz pomoć koje možemo upisati naredbe za kreaciju tablica unutar baze. Unutar terminala odabiremo opciju \textbf{Exec} te u njoj napišemo naredbu: \textbf{psql -U postgres -d db}\\
+				\noindent Na Linuxu je procedura slična, može se iz terminala direktno pristupiti bazi podataka uz pomoć naredbe: \textbf{psql -h localhost -p 5450 -U postgres -d db}\\
 				\eject
 				\noindent Tada možemo pisati naredbe za našu bazu u SQL-u unutar terminala. Sljedeća naredba koju unosimo je cijela \textbf{ddl.sql} datoteka uz pomoć koje se kreiraju tablice. Nakon toga su backend i baza podataka uspješno postavljeni i spremni za korištenje. Kao provjeru za ispravno kreiranje tablica možemo napisati query poput ovoga:\\
 				\textbf{SELECT * FROM problems;}, u slučaju ispravnog postavljanja ispisuje se tablica \textit{problems}.\\
@@ -326,7 +327,7 @@
 			\noindent\textbf{Pokretanje frontend-a}\\
 			
 			\noindent Unutar terminala se navigiramo do direktorija \textit{bytepit-ui} te pokrećemo naredbu: \textbf{npm install}\\
-			Pomoću te naredbe se pokreće instalacija Vite-a i ostalih dependency-a koji su potrebni za pokretanje frontend-a. Za instalaciju je potrebno nekoliko minuta.\\
+			Pomoću te naredbe se pokreće instalacija Vite-a i ostalih dependencyja koji su potrebni za pokretanje frontenda. Za instalaciju je potrebno nekoliko minuta.\\
 			\noindent Nakon instalacije pokrećemo naredbu: \textbf{npm run dev} koja pokreće frontend.
 			\begin{figure}[H]
 				\includegraphics[scale=0.9]{slike/vite.PNG} 
@@ -341,5 +342,4 @@
 				\caption{Pokrenuta aplikacija}
 				\label{fig:bytepit}
 			\end{figure}
-			Za zaustavljanje koristimo naredbu: \textbf{npm run stop}\\
 			

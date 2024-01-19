@@ -158,7 +158,8 @@
 		
 			
 			
-			Na sljedećim slikama, 4.10, 4.11, 4.12 i 4.13 prikazani su dijagrami razreda koji pripadaju backend dijelu aplikacije. Na slici 4.10 prikazani su ruteri logički podijeljeni metodama određenih aktora. Tako imamo "Users Router", "Admin Router" i "Auth Router" koje sve sadrži API (glavni dio backenda aplikacije). Metode implementirane u tim klasama manipuliraju podacima iz baze i podacima o trenutnom korisniku (web token i ostali podaci u kolačiću).
+			Na sljedećim slikama, 4.10, 4.11, 4.12 i 4.13 prikazani su dijagrami razreda koji pripadaju backend dijelu aplikacije. Treba napomenuti kako ovaj tip dijagrama nije prikladan za naš tip arhitekture API-ja. Naime, ovaj tip podataka je odličan za arhitekture u kojima se dosljedno prati REST model, gdje svaka operacija u pravilu mijenja jedan resurs (entitet). S druge strane, naša arhitektura se temelji na action-based (verb-based) RPC-evima (remote procedure call), te samim time dijagrami razreda temeljeni na entitetima nemaju smisla. No ipak, s obzirom da je ovo obavezan dio dokumentacije, napravili smo pseudo-dijagram u kojem su aktori zapravo naši API routeri.  
+			Na slici 4.10 prikazani su ruteri logički podijeljeni metodama određenih aktora. Tako imamo "Users Router", "Admin Router" i "Auth Router" koje sve sadrži API (glavni dio backenda aplikacije). Metode implementirane u tim klasama manipuliraju podacima iz baze i podacima o trenutnom korisniku (web token i ostali podaci u kolačiću).
 			
 			\begin{figure}[H]
 				\centering
@@ -228,7 +229,7 @@
 		\section{Dijagram komponenti}
 		
 		
-			Slika 4.10 prikazuje dijagram komponenti koji ilustrira kako su komponente organizirane međusobno, unutar sustava te kako su povezane s okolinom. Sustavu se pristupa kroz dva sučelja. 
+			Slika 4.16 prikazuje dijagram komponenti koji ilustrira kako su komponente organizirane međusobno, unutar sustava te kako su povezane s okolinom. Sustavu se pristupa kroz dva sučelja. 
 			
 			Prvo sučelje ima funkciju prikupljanja Typescript datoteka koje pripadaju frontend dijelu aplikacije. Ključnu ulogu ima Router, određujući koje će datoteke biti poslužene na sučelju. Frontend se sastoji od niza cjelina organiziranih prema tipovima korisnika, a Typescript datoteke koriste React, Tailwind i Primereact biblioteke za integraciju već pripremljenih komponenata.
 			
