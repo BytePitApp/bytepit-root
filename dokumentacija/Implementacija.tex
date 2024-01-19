@@ -27,10 +27,10 @@
 					\item Očekivani response: HTTP 201 CREATED.
 				\end{packed_item}
 				
-			\subsubsection{Ispitni slučaj 2: Prijava korisnika}
+			\subsubsection{Ispitni slučaj 2: Neispravna registracija korisnika}
 				\begin{packed_item}
-					\item Testira se funkcija login() za ulogiravanje postojećeg korisnika uz mockanje tokena
-					\item Očekivani response: HTTP 200
+					\item Testira se funkcija register() s pogrešnim podatkom "role", daje mu se nepostojeća uloga.
+					\item Očekivani response: ValidationError
 				\end{packed_item}
 			
 			\subsubsection{Ispitni slučaj 3: Ispravno kreiranje problema}
@@ -181,7 +181,7 @@
 			\noindent \textbf{Rezultat:} Očekivani rezultati [1., 2.] su zadovoljeni jer je korisnik unio e-poštu koja se već koristi. \textbf{Aplikacija je prošla test.}
 			
 			\begin{figure}[H]
-				\includegraphics[scale=0.50]{slike/registration_new_user_test_result.PNG}
+				\includegraphics[scale=0.50]{slike/registration_already_exists_test_result.PNG}
 				\centering
 				\caption{Uspješna registracija}
 				\label{fig:failed_register}

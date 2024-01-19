@@ -99,7 +99,7 @@
 		
 		\subsubsection*{Problems\_on\_competitions}
 		
-		Entitet \textbf{problems\_on\_competitions} sadržava informacije o zadacima koji pripadaju pojedinim natjecanjima. Sadržava atribute: \textit{id, problem\_id, competition\_id, num\_of\_points}.
+		Entitet \textbf{problems\_on\_competitions} sadržava informacije o zadacima koji pripadaju pojedinim natjecanjima. Ovaj entitet je u \textit{many-to-many} vezi s entitetom \textit{competitions} preko atributa \textit{competition\_id}, te također u \textit{many-to-many} vezi sa entitetom \textit{problems} preko atributa \textit{problem\_id}. Sadržava atribute: \textit{id, problem\_id, competition\_id, num\_of\_points}.
 		
 		\begin{figure}[htbp]
 			\centering
