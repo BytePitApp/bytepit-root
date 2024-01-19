@@ -16,14 +16,49 @@
 	
 		\section{Ispitivanje programskog rješenja}
 			
-			\textbf{\textit{dio 2. revizije}}\\
-			
-			 \textit{U ovom poglavlju je potrebno opisati provedbu ispitivanja implementiranih funkcionalnosti na razini komponenti i na razini cijelog sustava s prikazom odabranih ispitnih slučajeva. Studenti trebaju ispitati temeljnu funkcionalnost i rubne uvjete.}
-	
 			
 			\subsection{Ispitivanje komponenti}
-			\textit{Potrebno je provesti ispitivanje jedinica (engl. unit testing) nad razredima koji implementiraju temeljne funkcionalnosti. Razraditi \textbf{minimalno 6 ispitnih slučajeva} u kojima će se ispitati redovni slučajevi, rubni uvjeti te izazivanje pogreške (engl. exception throwing). Poželjno je stvoriti i ispitni slučaj koji koristi funkcionalnosti koje nisu implementirane. Potrebno je priložiti izvorni kôd svih ispitnih slučajeva te prikaz rezultata izvođenja ispita u razvojnom okruženju (prolaz/pad ispita). }
 			
+			\subsubsection{Ispitni slučaj 1: Registracija korisnika}
+				\begin{packed_item}
+					
+					\item Testira se rad funkcije \texttt{register()} iz \texttt{auth\_services.py}.
+					\item Mock-anje autentikacije i spremanja korisnika u bazu.
+					\item Očekivani response: HTTP 201 CREATED.
+				\end{packed_item}
+				
+			\subsubsection{Ispitni slučaj 2: Prijava korisnika}
+				\begin{packed_item}
+					\item Testira se funkcija login() za ulogiravanje postojećeg korisnika uz mockanje tokena
+					\item Očekivani response: HTTP 200
+				\end{packed_item}
+			
+			\subsubsection{Ispitni slučaj 3: Ispravno kreiranje problema}
+				\begin{packed_item}
+					\item Testira se funkcija \texttt{create\_problem()}
+					\item Mock-anje form date za popunjavanje forme za kreiranje problema.
+					\item Očekivani response: HTTP 201 CREATED
+				\end{packed_item}
+			
+			\subsubsection{Ispitni slučaj 4: Neispravno kreiranje problema}
+				\begin{packed_item}
+					\item Form data popunjena neispravnim podacima.
+					\item očekivani response: HTTP 422
+			 	\end{packed_item}	
+			 	
+			\subsubsection{Ispitni slučaj 5: Ispravno kreiranje natjecanja}
+				\begin{packed_item}
+					\item Mock- anje form date za kreiranje natjecanja
+					\item Očekivani response: HTTP 201 CREATED
+				\end{packed_item}
+				
+			\subsubsection{Ispitni slučaj 6: Neispravno kreiranje natjecanja}
+				\begin{packed_item}
+					\item Mock form date s nedovoljno podataka
+					\item Očekivani response: HTTP 422
+				\end{packed_item}
+				
+			\eject
 			
 			
 			\subsection{Ispitivanje sustava}
@@ -51,11 +86,13 @@
 			\noindent \textbf{Rezultat:} Očekivani rezultat [1.] je zadovoljen jer je korisnik ispravno unio podatke. \textbf{Aplikacija je prošla test.}
 			
 			\begin{figure}[H]
-				\includegraphics[scale=0.38]{slike/screenshot_test_result.PNG}
+				\includegraphics[scale=0.50]{slike/screenshot_test_result.PNG}
 				\centering
 				\caption{Uspješna prijava}
 				\label{fig:sucess_login}
 			\end{figure}
+			
+			\eject
 			
 			\subsubsection{Ispitni slučaj 2: Neispravna prijava u sustav}
 			
@@ -80,11 +117,13 @@
 			\noindent \textbf{Rezultat:} Očekivani rezultat [1.] je zadovoljen jer je korisnik unio pogrešnu zaporku. \textbf{Aplikacija je prošla test.}
 			
 			\begin{figure}[H]
-				\includegraphics[scale=0.38]{slike/failed_login.PNG}
+				\includegraphics[scale=0.50]{slike/failed_login.PNG}
 				\centering
 				\caption{Neuspješna prijava}
 				\label{fig:failed_login}
 			\end{figure}
+			
+			\eject
 			
 			\subsubsection{Ispitni slučaj 3: Ispravna registracija novog korisnika}
 			
@@ -107,14 +146,16 @@
 				
 			\end{packed_enum}
 			
-			\noindent \textbf{Rezultat:} Očekivani rezultati [1., 2.] su zadovoljeni jer je korisnik ispravno unio podatke koji su traženi, te nije unio e-poštu koja se od prije koristi. \textbf{Aplikacija je prošla test.}
+			\noindent \textbf{Rezultat:} Očekivani rezultati [1., 2.] su zadovoljeni jer je korisnik ispravno unio podatke koji su traženi. \textbf{Aplikacija je prošla test.}
 			
 			\begin{figure}[H]
-				\includegraphics[scale=0.38]{slike/registration_new_user_test:result.PNG}
+				\includegraphics[scale=0.50]{slike/registration_new_user_test_result.PNG}
 				\centering
 				\caption{Uspješna registracija}
 				\label{fig:sucess_register}
 			\end{figure}
+			
+			\eject
 			
 			\subsubsection{Ispitni slučaj 4: Neispravna registracija novog korisnika}
 			
@@ -140,11 +181,13 @@
 			\noindent \textbf{Rezultat:} Očekivani rezultati [1., 2.] su zadovoljeni jer je korisnik unio e-poštu koja se već koristi. \textbf{Aplikacija je prošla test.}
 			
 			\begin{figure}[H]
-				\includegraphics[scale=0.38]{slike/registration_new_user_test:result.PNG}
+				\includegraphics[scale=0.50]{slike/registration_new_user_test_result.PNG}
 				\centering
 				\caption{Uspješna registracija}
 				\label{fig:failed_register}
 			\end{figure}
+			
+			\eject
 			
 			\subsubsection{Ispitni slučaj 5: Uspješno kreiranje zadatka}
 			
@@ -169,11 +212,13 @@
 			\noindent \textbf{Rezultat:} Očekivani rezultat [1.] je zadovoljen jer je korisnik ispravno ispunio formu za izradu novog zadatka. \textbf{Aplikacija je prošla test.}
 			
 			\begin{figure}[H]
-				\includegraphics[scale=0.38]{slike/create_problem_test.PNG}
+				\includegraphics[scale=0.50]{slike/create_problem_test.PNG}
 				\centering
 				\caption{Uspješna izrada novog zadatka}
 				\label{fig:sucess_new_problem}
 			\end{figure}
+			
+			\eject
 			
 			\subsubsection{Ispitni slučaj 6: Neuspješno kreiranje zadatka}
 			
@@ -198,11 +243,13 @@
 			\noindent \textbf{Rezultat:} Očekivani rezultat [1.] je zadovoljen jer je korisnik neispravno ispunio formu za izradu novog zadatka. \textbf{Aplikacija je prošla test.}
 			
 			\begin{figure}[H]
-				\includegraphics[scale=0.38]{slike/create_problem_test_wrong.PNG}
+				\includegraphics[scale=0.50]{slike/create_problem_test_wrong.PNG}
 				\centering
 				\caption{Neuspješna izrada novog zadatka}
 				\label{fig:failed_new_problem}
 			\end{figure}
+			
+			\eject
 			
 			\subsubsection{Ispitni slučaj 7: Uspješna odjava korisnika}
 			
@@ -224,7 +271,7 @@
 			\noindent \textbf{Rezultat:} Očekivani rezultat [1.] je zadovoljen. \textbf{Aplikacija je prošla test.}
 			
 			\begin{figure}[H]
-				\includegraphics[scale=0.38]{slike/create_problem_test_wrong.PNG}
+				\includegraphics[scale=0.50]{slike/screen_after_logout.PNG}
 				\centering
 				\caption{Uspješna odjava}
 				\label{fig:sucess_logout}
